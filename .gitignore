@@ -1,0 +1,14 @@
+# --- Python bytecode ---
+# Auto-generated compiled files. Regenerated automatically on every run,
+__pycache__/
+*.pyc
+
+# --- Virtual environment ---
+venv/
+
+# --- OS-generated junk files ---
+Thumbs.db
+
+.vscode/
+
+.env
