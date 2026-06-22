@@ -31,5 +31,6 @@ def listen():
         except Exception as e:
             print(f"An unknown error {e} occured")
             return None
-
+        
+        print(f"You said: {recognized_text}")
         return recognized_text.lower()

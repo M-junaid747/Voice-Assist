@@ -10,5 +10,8 @@ TTS_VOL = 1.0 # generated speech volume
 # Certain name for the assistant
 ASSISTANT_NAME = "JACK"
 
+# Wikipedia User Agent
+USER_AGENT = "voice-assistant"
+
 # Set of words, if spoken, should shutdown the assistant. 
 EXIT_COMMANDS = {"exit", "goodbye", "takecare", "stop", "quit", "shutdown", "see you soon"}
