@@ -15,3 +15,5 @@ USER_AGENT = "voice-assistant"
 
 # Set of words, if spoken, should shutdown the assistant. 
 EXIT_COMMANDS = {"exit", "goodbye", "takecare", "stop", "quit", "shutdown", "see you soon"}
+
+DEFAULT_SCRIPT = "main.py"
