@@ -48,8 +48,17 @@ def _parse_git_log(output: str) -> str:
 
 @register_intent("open vscode")
 def handle_open_vscode(text: str) ->str:
-    subprocess.Popen(["code","."])
+    system = platform.system()
+    if system == "Windows":
+        subprocess.Popen(["code", "."], shell=True)
+    elif system == "Linux":
+        subprocess.Popen(["code", "."])
+    elif system == "Darwin":
+        subprocess.Popen(["code", "."])
+    else:
+        return "Opening VSCode isn't supported on this system yet"
     return "Opening VSCode"
+
 
 @register_intent("open terminal")
 def handle_open_terminal(text: str) ->str:
