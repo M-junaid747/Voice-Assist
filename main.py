@@ -1,12 +1,14 @@
 import config
 
+import features.general
+import features.dev_tools
 import wikipedia
-from core import listener, speaker, commands
+from core import listener, speaker, registry
 
 def main():
     wikipedia.set_user_agent(config.USER_AGENT)
 
-    print(f"=== {config.ASSISTANT_NAME} (Stage 1) ===")
+    print(f"=== {config.ASSISTANT_NAME} (Stage 2) ===")
     print("Press ENTER to speak, or type 'exit' to quit.\n")
 
     speaker.speak(f"{config.ASSISTANT_NAME} is online. Press Enter to speak to me.")
@@ -39,7 +41,7 @@ def main():
         
 
         try:
-            reply = commands.route_command(text)
+            reply = registry.route_command(text)
     
             if reply is None:
                 reply = "Sorry, I don't know how to do that yet."
