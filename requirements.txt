@@ -2,3 +2,6 @@ SpeechRecognition==3.17.0
 pyttsx3==2.99
 wikipedia==1.4.0
 Pyaudio==0.2.14
+vosk==0.3.45
+openwakeword==0.6.0
+sounddevice==0.5.5

@@ -22,3 +22,10 @@ DEFAULT_SCRIPT = "main.py"
 # Below this, the assistant says "I didn't understand" instead of guessing.
 # Tune this up if getting too many false positives, down if missing real commands.
 NLU_THRESHOLD = 0.25
+
+# Audio settings for Vosk STT and wake word detection
+AUDIO_SAMPLE_RATE = 16000
+AUDIO_BLOCK_SIZE = 8000
+AUDIO_DEVICE_INDEX = 1
+WAKE_WORD_MODEL = "hey jack"
+WAKE_WORD_THRESHOLD = 0.5
