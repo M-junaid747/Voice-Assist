@@ -4,42 +4,30 @@ import features.general
 import features.dev_tools
 import wikipedia
 from core import listener, speaker, registry
+from core.listener import start_wake_word_listener, WAKE_EVENT
 
 def main():
+    start_wake_word_listener()
     wikipedia.set_user_agent(config.USER_AGENT)
 
-    print(f"=== {config.ASSISTANT_NAME} (Stage 2) ===")
-    print("Press ENTER to speak, or type 'exit' to quit.\n")
-
-    speaker.speak(f"{config.ASSISTANT_NAME} is online. Press Enter to speak to me.")
+    print(f"=== {config.ASSISTANT_NAME} (Stage 4) ===")
+    print(f"Say '{config.WAKE_WORD_MODEL}' to activate.\n")
+    speaker.speak(f"{config.ASSISTANT_NAME} is online. Say hey jack to activate.")
 
     while True:
-        user_input = input("\n[Press ENTER to talk, or type a command/'exit']: ").strip().lower()
+        WAKE_EVENT.wait()
+        WAKE_EVENT.clear()
 
-        # Allow typed exit too, without needing the mic — useful for quick
-        # testing without triggering speech recognition every time.
-        if user_input in config.EXIT_COMMANDS:
-            speaker.speak("Goodbye!")
-            break
-
-        # If they typed something other than just hitting Enter, treat the
-        # typed text itself as the command (handy for testing without a mic).
-        if user_input:
-            text = user_input
-        else:
-            text = listener.listen()
-
+        speaker.speak("Yes?")
+        text = listener.listen()
+        
         if not text:
-            # Either mic timeout or unintelligible audio — listener.listen()
-            # already printed the reason, so just loop back and try again.
             continue
-
         
-        if text in config.EXIT_COMMANDS or any(cmd in text for cmd in config.EXIT_COMMANDS):
+        if any(cmd in text for cmd in config.EXIT_COMMANDS):
             speaker.speak("Goodbye!")
             break
         
-
         try:
             reply = registry.route_command(text)
     
