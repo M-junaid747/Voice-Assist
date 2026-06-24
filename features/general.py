@@ -3,19 +3,22 @@ import datetime
 import wikipedia
 from core.registry import register_intent
 
-@register_intent("what time is it")
+@register_intent(intent = "time", keywords = ["time", "clock", "hour", "current", "now"])
 def handle_time(text: str) ->str:
     return f"The time is {datetime.datetime.now().strftime("%I:%M %p")}"
 
-@register_intent("what's the date")
+@register_intent(intent = "date", keywords = ["date", "day", "today", "month", "year"])
 def handle_date(text: str) ->str:
     return f"The date today is {datetime.datetime.now().strftime("%B %d, %Y")}"
 
-@register_intent("wikipedia")
+@register_intent(intent = "wikipedia", keywords = ["wikipedia", "search", "lookup", "tell", "who"])
 def handle_wikipedia(text: str) -> str:
     # Strip the trigger word to get the actual search topic.
     # e.g. "wikipedia albert einstein" -> "albert einstein"
-    topic = text.replace("wikipedia", "", 1).strip()
+    trigger_words = ["wikipedia", "search", "lookup", "tell", "who"]
+    for word in trigger_words:
+        text = text.replace(word , "", 1)
+    topic = text.strip()
     if not topic:
         return "What would you like me to look up on Wikipedia?"
 

@@ -46,7 +46,7 @@ def _parse_git_log(output: str) -> str:
     return f"Recent commits: {recent_commits}"
 
 
-@register_intent("open vscode")
+@register_intent(intent = "open_vscode", keywords = ["vscode", "code", "editor", "coding", "project"])
 def handle_open_vscode(text: str) ->str:
     system = platform.system()
     if system == "Windows":
@@ -60,7 +60,7 @@ def handle_open_vscode(text: str) ->str:
     return "Opening VSCode"
 
 
-@register_intent("open terminal")
+@register_intent(intent= "open_terminal", keywords = ["terminal", "shell", "console", "command", "powershell"])
 def handle_open_terminal(text: str) ->str:
     system = platform.system()
     if system == "Windows":
@@ -72,10 +72,10 @@ def handle_open_terminal(text: str) ->str:
     elif system == "Darwin":
         subprocess.Popen(["open", "-a", "Terminal"])
         return "Opening terminal"
-    return "Terminal not opening now"
+    return "Opening terminal not supported yet"
     
 
-@register_intent("open python shell")
+@register_intent(intent= "open_python_shell", keywords = ["python", "shell", "interpreter", "repl", "interactive"])
 def handle_python_shell(text: str) ->str:
     system = platform.system()
     if system == "Windows":
@@ -91,14 +91,14 @@ def handle_python_shell(text: str) ->str:
         return "Shell no supported yet"
     
 
-@register_intent("check git status")
+@register_intent(intent= "git_status", keywords = ["git", "status", "changes", "modified", "staged"])
 def handle_git_status(text: str) ->str:
     result = subprocess.run(["git", "status"], capture_output=True, text=True)
     if result.returncode !=0:
         return f"Something went wrong: {result.stderr}"
     return _parse_git_status(result.stdout)
 
-@register_intent("check git log")
+@register_intent(intent= "git_log", keywords = ["log", "commits", "history", "recent", "previous"])
 def handle_git_log(text: str) ->str:
     result = subprocess.run(["git", "log", "--oneline", "-5"], capture_output=True, text=True)
     if result.returncode !=0:
@@ -106,7 +106,7 @@ def handle_git_log(text: str) ->str:
     return _parse_git_log(result.stdout)   
 
 
-@register_intent("run script")
+@register_intent(intent= "run_script", keywords = ["run", "execute", "script", "launch", "start"])
 def handle_run_script(text: str) ->str:
     result = subprocess.run(["python",config.DEFAULT_SCRIPT], capture_output=True, text=True)
     if result.returncode !=0:
