@@ -12,7 +12,7 @@ def main():
 
     print(f"=== {config.ASSISTANT_NAME} (Stage 4) ===")
     print(f"Say '{config.WAKE_WORD_MODEL}' to activate.\n")
-    speaker.speak(f"{config.ASSISTANT_NAME} is online. Say hey jack to activate.")
+    speaker.speak(f"{config.ASSISTANT_NAME} is online. Say hey jarvis to activate.")
 
     while True:
         WAKE_EVENT.wait()
