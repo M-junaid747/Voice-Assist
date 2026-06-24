@@ -20,7 +20,7 @@ CONTRACTIONS =  {
 }
 
 FILLERS = {
-    "um", "uh", "er", "like", "you", 
+    "um", "uh", "er", "like", "you", "me",
     "actually", "basically", "literally", "i", 
     "right", "so", "well", "hmm", "anyway"
 }

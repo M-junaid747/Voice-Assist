@@ -21,4 +21,4 @@ DEFAULT_SCRIPT = "main.py"
 # NLU confidence threshold — minimum score for an intent to be acted on.
 # Below this, the assistant says "I didn't understand" instead of guessing.
 # Tune this up if getting too many false positives, down if missing real commands.
-NLU_THRESHOLD = 0.3
+NLU_THRESHOLD = 0.25

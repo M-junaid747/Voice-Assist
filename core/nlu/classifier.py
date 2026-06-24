@@ -10,6 +10,8 @@ def classify(text: str) ->tuple | None:
 
     scores = {}
 
+    words = clean_text.split()
+
     for intent_label, intent_data in REGISTRY.items():
         keywords_in_text = 0
         keywords = intent_data.get("keywords", [])
@@ -20,7 +22,7 @@ def classify(text: str) ->tuple | None:
         total_intent_keywords = len(keywords)
 
         for keyword in keywords:
-            if keyword in clean_text:
+            if keyword in words:
                 keywords_in_text +=1
                 
         score = keywords_in_text / total_intent_keywords

@@ -11,7 +11,7 @@ def handle_time(text: str) ->str:
 def handle_date(text: str) ->str:
     return f"The date today is {datetime.datetime.now().strftime("%B %d, %Y")}"
 
-@register_intent(intent = "wikipedia", keywords = ["wikipedia", "search", "lookup", "tell", "who"])
+@register_intent(intent = "wikipedia", keywords = ["wikipedia", "search", "lookup", "tell", "who", "about", "what"])
 def handle_wikipedia(text: str) -> str:
     # Strip the trigger word to get the actual search topic.
     # e.g. "wikipedia albert einstein" -> "albert einstein"
