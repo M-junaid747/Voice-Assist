@@ -1,36 +1,61 @@
-import speech_recognition as sr
+# import speech_recognition as sr
+import json
+import threading
+import sounddevice as sd
+from vosk import Model, KaldiRecognizer
+from openwakeword.model import Model as WakeWordModel
 import config
 
-def listen():
-    recognizer = sr.Recognizer()
-    
-    with sr.Microphone() as source:
-        recognizer.adjust_for_ambient_noise(source, duration = 0.5)
-        
-        try:
-            audio = recognizer.listen(
-                source, timeout= config.STT_WAIT_TIME,
-                phrase_time_limit = config.STT_PHRASE_TIME_LIMIT)
+# shared signal — wake word thread sets this, main loop waits on it
+WAKE_EVENT = threading.Event()
 
-        except sr.WaitTimeoutError:
-            print("Input Timed out. Try Again...")
-            return None
+# load models
+vosk_model = Model("vosk-model-small-en-us-0.15")
+oww_model = WakeWordModel(wakeword_models= [config.WAKE_WORD_MODEL])
+recognizer = KaldiRecognizer(vosk_model, config.AUDIO_SAMPLE_RATE)
 
+def _wake_word_loop():
+        with sd.RawInputStream(
+        samplerate=config.AUDIO_SAMPLE_RATE,
+        blocksize=config.AUDIO_BLOCK_SIZE,
+        device=config.AUDIO_DEVICE_INDEX,
+        dtype="int16",
+        channels=1
+        ) as stream:
+            while True:
+                data, _ = stream.read(config.AUDIO_BLOCK_SIZE)
+                audio_chunks =data.flatten()
+                prediction = oww_model.predict(audio_chunks)
 
-        try:    
-            recognized_text = recognizer.recognize_google(audio, language = config.STT_LANG)
+                for wake_word, score in prediction.items():
+                    if score > config.WAKE_WORD_THRESHOLD:
+                        if not WAKE_EVENT.is_set():  # only set if not already waiting
+                            print("Wake word detected...")
+                            WAKE_EVENT.set()
 
-        except sr.UnknownValueError:
-            print("Voice not recognized")
-            return None
+def start_wake_word_listener():
+    thread = threading.Thread(target=_wake_word_loop, daemon=True)
+    thread.start()
 
-        except sr.RequestError:
-            print("Connection Failed")
-            return None
+def listen() ->str | None:
+    with sd.RawInputStream(
+        samplerate=config.AUDIO_SAMPLE_RATE,
+        blocksize=config.AUDIO_BLOCK_SIZE,
+        device=config.AUDIO_DEVICE_INDEX,
+        dtype="int16",
+        channels=1
+        ) as stream:
+            while True:
+                audio, _ = stream.read(config.AUDIO_BLOCK_SIZE)            
+                utterance = recognizer.AcceptWaveform(bytes(audio))
 
-        except Exception as e:
-            print(f"An unknown error {e} occured")
-            return None
-        
-        print(f"You said: {recognized_text}")
-        return recognized_text.lower()
+                if utterance:
+                    result = recognizer.Result()
+                    json_text = json.loads(result)
+
+                    text = json_text.get("text", "")
+
+                    if text:
+                        return text.lower()
+                    else:
+                        return None
