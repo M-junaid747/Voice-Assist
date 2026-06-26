@@ -3,7 +3,6 @@ import json
 import threading
 import sounddevice as sd
 from vosk import Model, KaldiRecognizer
-from openwakeword.model import Model as WakeWordModel
 import config
 
 # shared signal — wake word thread sets this, main loop waits on it
@@ -11,8 +10,8 @@ WAKE_EVENT = threading.Event()
 
 # load models
 vosk_model = Model("vosk-model-small-en-us-0.15")
-oww_model = WakeWordModel(wakeword_models= [config.WAKE_WORD_MODEL])
-recognizer = KaldiRecognizer(vosk_model, config.AUDIO_SAMPLE_RATE)
+wake_recognizer = KaldiRecognizer(vosk_model, config.AUDIO_SAMPLE_RATE)
+command_recognizer = KaldiRecognizer(vosk_model, config.AUDIO_SAMPLE_RATE)
 
 def _wake_word_loop():
         with sd.RawInputStream(
@@ -24,14 +23,18 @@ def _wake_word_loop():
         ) as stream:
             while True:
                 data, _ = stream.read(config.AUDIO_BLOCK_SIZE)
-                audio_chunks =data.flatten()
-                prediction = oww_model.predict(audio_chunks)
+                audio_chunks = wake_recognizer.AcceptWaveform(bytes(data))
 
-                for wake_word, score in prediction.items():
-                    if score > config.WAKE_WORD_THRESHOLD:
-                        if not WAKE_EVENT.is_set():  # only set if not already waiting
-                            print("Wake word detected...")
-                            WAKE_EVENT.set()
+                if audio_chunks:
+                    result = wake_recognizer.Result()
+                    json_text = json.loads(result)
+
+                    text = json_text.get("text", "")
+
+                    if config.WAKE_WORD_MODEL in text:
+                         if not WAKE_EVENT.is_set():
+                              print("Wake word detected...")
+                              WAKE_EVENT.set()
 
 def start_wake_word_listener():
     thread = threading.Thread(target=_wake_word_loop, daemon=True)
@@ -47,10 +50,10 @@ def listen() ->str | None:
         ) as stream:
             while True:
                 audio, _ = stream.read(config.AUDIO_BLOCK_SIZE)            
-                utterance = recognizer.AcceptWaveform(bytes(audio))
+                utterance = command_recognizer.AcceptWaveform(bytes(audio))
 
                 if utterance:
-                    result = recognizer.Result()
+                    result = command_recognizer.Result()
                     json_text = json.loads(result)
 
                     text = json_text.get("text", "")
