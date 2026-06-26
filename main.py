@@ -20,6 +20,7 @@ def main():
 
         speaker.speak("Yes?")
         text = listener.listen()
+        print(f"Heard: {text}")
         
         if not text:
             continue
