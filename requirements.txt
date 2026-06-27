@@ -5,3 +5,4 @@ Pyaudio==0.2.14
 vosk==0.3.45
 openwakeword==0.6.0
 sounddevice==0.5.5
+pyinstaller
