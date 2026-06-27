@@ -33,11 +33,13 @@ def main():
 
         speaker.speak("Yes?")
         text = listener.listen()
+        logger.info(f"Heard: {text}")
         
         if not text:
             continue
         
         if any(cmd in text for cmd in config.EXIT_COMMANDS):
+            logger.info("Exit command received")
             speaker.speak("Goodbye!")
             break
         
@@ -45,12 +47,16 @@ def main():
             reply = registry.route_command(text)
     
             if reply is None:
+                logger.warning(f"No intent matched for: {text}")
                 reply = "Sorry, I don't know how to do that yet."
-
+            
+            logger.info(f"Response: {reply}")
             speaker.speak(reply)
         except Exception as e:
             logger.error(f"Unexpected Exception... {e}")
             continue 
+
+    logger.info(f"{config.ASSISTANT_NAME} shutting down")
 
 # Entry point. Not a Library. Execute main() only when this main.py runs, not when it is imported somewhere else.
 if __name__ == "__main__":

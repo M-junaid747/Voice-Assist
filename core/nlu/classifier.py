@@ -1,6 +1,7 @@
 import config
 from core.registry import REGISTRY
 from core.nlu.normalizer import normalize
+from core.logger import logger
 
 def classify(text: str) ->tuple | None:
     clean_text = normalize(text)
@@ -36,6 +37,7 @@ def classify(text: str) ->tuple | None:
     best_score = scores[best_intent]
 
     if best_score < config.NLU_THRESHOLD:
+        logger.warning(f"Low confidence - best: {best_intent} = {best_score:.2f}")
         return None
     
     return (best_intent, clean_text)

@@ -1,3 +1,5 @@
+from core.logger import logger
+
 REGISTRY = {}
 
 def register_intent(intent: str, keywords: list):
@@ -21,6 +23,7 @@ def route_command(text: str) ->str | None:
     if entry is None:
         return None
     
+    logger.info(f"Intent matched: {intent_label}")    
     return entry["handler"](clean_text)
     
     
