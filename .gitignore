@@ -15,3 +15,6 @@ Thumbs.db
 
 # Vosk speech recognition model
 vosk-model-small-en-us-0.15/
+
+# Log Files
+logs/
