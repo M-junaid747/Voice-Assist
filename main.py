@@ -1,18 +1,30 @@
+import os
+import importlib
 import config
 
-import features.general
-import features.dev_tools
 import wikipedia
 from core import listener, speaker, registry
 from core.listener import start_wake_word_listener, WAKE_EVENT
 
+def load_features():
+        features_dir = os.path.join(os.path.dirname(__file__), "features")
+        for filename in os.listdir(features_dir):
+            if filename.endswith(".py") and filename != "__init__.py":
+                module_name = "features." + filename.replace(".py", "")
+                try:
+                    importlib.import_module(module_name)
+                    print(f"Loaded: {module_name}")
+                except Exception as e:
+                    print(f"Failed to load {module_name}: {e}")
+
 def main():
+    load_features()   
     start_wake_word_listener()
     wikipedia.set_user_agent(config.USER_AGENT)
 
-    print(f"=== {config.ASSISTANT_NAME} (Stage 4) ===")
+    print(f"=== {config.ASSISTANT_NAME} (Stage 5) ===")
     print(f"Say '{config.WAKE_WORD_MODEL}' to activate.\n")
-    speaker.speak(f"{config.ASSISTANT_NAME} is online. Say hey jarvis to activate.")
+    speaker.speak(f"{config.ASSISTANT_NAME} is online. Say hey jack to activate.")             
 
     while True:
         WAKE_EVENT.wait()
@@ -20,7 +32,6 @@ def main():
 
         speaker.speak("Yes?")
         text = listener.listen()
-        print(f"Heard: {text}")
         
         if not text:
             continue
