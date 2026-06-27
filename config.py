@@ -29,3 +29,7 @@ AUDIO_BLOCK_SIZE = 8000
 AUDIO_DEVICE_INDEX = 1
 WAKE_WORD_MODEL = "hey jack"
 WAKE_WORD_THRESHOLD = 0.5
+
+# Logging
+LOG_FILE = "logs/assistant.log"
+LOG_LEVEL = "INFO"

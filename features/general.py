@@ -2,6 +2,7 @@ import datetime
 
 import wikipedia
 from core.registry import register_intent
+from core.logger import logger
 
 @register_intent(intent = "time", keywords = ["time", "clock", "hour", "current", "now"])
 def handle_time(text: str) ->str:
@@ -25,7 +26,7 @@ def handle_wikipedia(text: str) -> str:
     try:
         # sentences=2 keeps spoken responses short — a full Wikipedia
         # summary read aloud is tedious to listen to.
-        print(f"Searching Wikipedia for: {topic}...")
+        logger.info(f"Searching Wikipedia for: {topic}...")
         summary = wikipedia.summary(topic, sentences=2)
         return summary
     except wikipedia.DisambiguationError as e:

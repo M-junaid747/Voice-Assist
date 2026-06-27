@@ -3,6 +3,7 @@ import platform
 import config
 
 from core.registry import register_intent
+from core.logger import logger
 
 def _parse_git_status(output: str) -> str:
     lines = output.splitlines()

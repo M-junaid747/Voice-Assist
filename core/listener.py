@@ -5,6 +5,8 @@ import sounddevice as sd
 from vosk import Model, KaldiRecognizer
 import config
 
+from core.logger import logger
+
 # shared signal — wake word thread sets this, main loop waits on it
 WAKE_EVENT = threading.Event()
 
@@ -33,7 +35,7 @@ def _wake_word_loop():
 
                     if config.WAKE_WORD_MODEL in text:
                          if not WAKE_EVENT.is_set():
-                              print("Wake word detected...")
+                              logger.info("Wake word detected...")
                               WAKE_EVENT.set()
 
 def start_wake_word_listener():

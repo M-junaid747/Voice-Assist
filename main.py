@@ -5,6 +5,7 @@ import config
 import wikipedia
 from core import listener, speaker, registry
 from core.listener import start_wake_word_listener, WAKE_EVENT
+from core.logger import logger
 
 def load_features():
         features_dir = os.path.join(os.path.dirname(__file__), "features")
@@ -13,17 +14,17 @@ def load_features():
                 module_name = "features." + filename.replace(".py", "")
                 try:
                     importlib.import_module(module_name)
-                    print(f"Loaded: {module_name}")
+                    logger.info(f"Loaded: {module_name}")
                 except Exception as e:
-                    print(f"Failed to load {module_name}: {e}")
+                    logger.warning(f"Failed to load {module_name}: {e}")
 
 def main():
     load_features()   
     start_wake_word_listener()
     wikipedia.set_user_agent(config.USER_AGENT)
 
-    print(f"=== {config.ASSISTANT_NAME} (Stage 5) ===")
-    print(f"Say '{config.WAKE_WORD_MODEL}' to activate.\n")
+    logger.info(f"=== {config.ASSISTANT_NAME} (Stage 5) ===")
+    logger.info(f"Say '{config.WAKE_WORD_MODEL}' to activate.\n")
     speaker.speak(f"{config.ASSISTANT_NAME} is online. Say hey jack to activate.")             
 
     while True:
@@ -48,7 +49,7 @@ def main():
 
             speaker.speak(reply)
         except Exception as e:
-            print(f"Unexpected Exception... {e}")
+            logger.error(f"Unexpected Exception... {e}")
             continue 
 
 # Entry point. Not a Library. Execute main() only when this main.py runs, not when it is imported somewhere else.
