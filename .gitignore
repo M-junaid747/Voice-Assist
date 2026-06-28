@@ -22,4 +22,3 @@ logs/
 # PyInstaller output
 build/
 dist/
-*.spec
