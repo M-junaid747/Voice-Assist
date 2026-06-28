@@ -18,3 +18,8 @@ vosk-model-small-en-us-0.15/
 
 # Log Files
 logs/
+
+# PyInstaller output
+build/
+dist/
+*.spec
