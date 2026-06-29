@@ -75,7 +75,7 @@ jarvis-voice-assistant/
 ```bash
 # Clone the repo
 git clone https://github.com/M-junaid747/Voice-Assist.git
-cd VOICE-ASSISTANT
+cd voice-assistant
 
 # Create and activate virtual environment
 python -m venv venv
