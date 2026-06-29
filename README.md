@@ -2,8 +2,6 @@
 
 A fully offline-capable, cross-platform desktop voice assistant built with Python. JACK listens for a wake word, understands your intent using a custom NLU pipeline, and responds with voice — no cloud STT required after setup.
 
-> 🎥 **[Watch Demo Video](https://your-demo-link-here)**
-
 ---
 
 ## Features
@@ -76,8 +74,8 @@ jarvis-voice-assistant/
 
 ```bash
 # Clone the repo
-git clone https://github.com/YOUR_USERNAME/jarvis-voice-assistant.git
-cd jarvis-voice-assistant
+git clone https://github.com/M-junaid747/Voice-Assist.git
+cd VOICE-ASSISTANT
 
 # Create and activate virtual environment
 python -m venv venv
